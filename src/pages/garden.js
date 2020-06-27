@@ -1,7 +1,7 @@
 /** @jsx h */
-import { h } from "preact";
+import {h} from 'preact'
 
-export default ({ posts }) => {
+export default ({posts}) => {
   return (
     <main>
       <h1 className="text-center text-4xl md:text-left md:text-6xl">
@@ -19,9 +19,9 @@ export default ({ posts }) => {
               </a>
               <p className="text-sm md:text-base mb-0">{post.description}</p>
             </article>
-          );
+          )
         })}
       </ul>
     </main>
-  );
-};
+  )
+}
