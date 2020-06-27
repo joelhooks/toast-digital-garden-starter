@@ -12,38 +12,13 @@ const allSeries = require('./data/series.json')
 
 exports.sourceData = async (toastStuff) => {
   const {createPage, ...options} = toastStuff
-  console.log(toastStuff)
 
   return Promise.all(
     allSeries.map(async (series) => {
-      const file = await fs.readFile(`./src/templates/course.mdx`, 'utf-8')
-      let compiledMDX
-
-      const {content} = frontmatter(file)
-
-      try {
-        compiledMDX = await mdx(content, {
-          rehypePlugins: [
-            rehypePrism,
-            rehypeSlug,
-            [
-              cloudinary,
-              {
-                baseDir: path.join(__dirname, 'courses', 'course', series.slug),
-                uploadFolder: 'toast-test',
-              },
-            ],
-          ],
-        })
-      } catch (e) {
-        console.log(e)
-        throw e
-      }
+      const file = await fs.readFile(`./src/templates/course.js`, 'utf-8')
 
       await createPage({
-        module: `/** @jsx mdx */
-            import {mdx} from '@mdx-js/preact';
-            ${compiledMDX}`,
+        module: file,
         slug: series.slug,
         data: {...series},
       })
