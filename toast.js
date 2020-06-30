@@ -6,10 +6,14 @@ const MDXPostsSource = require('./fetch-mdx-posts')
 const eggheadSeriesSource = require('./fetch-egghead-series')
 
 exports.sourceData = async (toastStuff) => {
-  const {withCache, createPage} = toastStuff
+  const {withCache, createPage, publicDir} = toastStuff
+  console.log(toastStuff)
   return Promise.all([
     withCache('mdx-posts', MDXPostsSource.sourceData({createPage})),
-    withCache('egghead-series', eggheadSeriesSource.sourceData({createPage})),
+    withCache(
+      'egghead-series',
+      eggheadSeriesSource.sourceData({createPage, publicDir}),
+    ),
   ])
 }
 
@@ -21,6 +25,22 @@ exports.prepData = async ({cacheDir, publicDir}) => {
 
   // prep page data for index and post pages
   const mdxPostsData = require(path.resolve(cacheDir, 'mdx-posts.json'))
+  const seriesData = require(path.resolve(cacheDir, 'egghead-series.json'))
+
+  const allSeriesData = seriesData.map(
+    ({title, square_cover_128_url, slug, description}) => ({
+      title,
+      image: square_cover_128_url,
+      slug,
+      description,
+      contentType: 'course',
+    }),
+  )
+
+  await fs.writeFile(
+    path.resolve(publicDir, 'src/pages/courses.json'),
+    JSON.stringify({courses: allSeriesData}),
+  )
 
   const allPostsData = mdxPostsData.map(({title, date, slug, description}) => ({
     title,

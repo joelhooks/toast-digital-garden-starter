@@ -1,13 +1,13 @@
 /** @jsx h */
-import { h } from "preact";
-import { Helmet } from "react-helmet";
-import { MDXProvider } from "@mdx-js/preact";
+import {h} from 'preact'
+import {Helmet} from 'react-helmet'
+import {MDXProvider} from '@mdx-js/preact'
 
-export default ({ children, ...props }) => {
+export default ({children, ...props}) => {
   return (
     <div>
       <Helmet>
-        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="/style.css" />
       </Helmet>
       <header className="bg-green-400 p-2">
         <div className="flex max-w-6xl w-full mx-auto">
@@ -30,14 +30,14 @@ export default ({ children, ...props }) => {
       <MDXProvider
         components={{
           h1: (props) => <h1 className="text-4xl" {...props} />,
-          inlineCode: ({ children }) => (
+          inlineCode: ({children}) => (
             <code
               style={{
-                backgroundColor: "rgb(1,22,39)",
+                backgroundColor: 'rgb(1,22,39)',
                 padding: 3,
                 margin: 3,
                 borderRadius: 5,
-                color: "#f0f0f0",
+                color: '#f0f0f0',
               }}
             >
               {children}
@@ -50,12 +50,12 @@ export default ({ children, ...props }) => {
                   __html: props.children.props.children,
                 }}
               />
-            );
+            )
           },
         }}
       >
         <div className="max-w-6xl mx-auto px-2">{children}</div>
       </MDXProvider>
     </div>
-  );
-};
+  )
+}

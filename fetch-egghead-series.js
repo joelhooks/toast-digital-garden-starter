@@ -11,21 +11,29 @@ const rehypePrism = require('./rehype-prism-plugin')
 const allSeries = require('./data/series.json')
 
 exports.sourceData = async (toastStuff) => {
-  const {createPage, ...options} = toastStuff
+  const {createPage, publicDir, ...options} = toastStuff
+
+  await fs.mkdir(path.resolve('./public/courses'), {recursive: true})
 
   return Promise.all(
     allSeries.map(async (series) => {
       const file = await fs.readFile(`./src/templates/course.js`, 'utf-8')
+      const slug = `courses/${series.slug}`
 
-      await createPage({
-        module: file,
-        slug: series.slug,
-        data: {...series},
-      })
+      try {
+        await createPage({
+          module: file,
+          slug: slug,
+          data: {...series, slug},
+        })
+      } catch (error) {
+        console.error(error)
+      }
 
       // Data to be stored in `mdx-posts.json` file
       return {
         ...series,
+        slug,
       }
     }),
   )
